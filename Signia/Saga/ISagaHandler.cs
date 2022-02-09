@@ -1,9 +1,10 @@
-﻿using Signia.Command;
+﻿using Signia.Application;
+using Signia.Command;
 using Signia.Event;
 
 namespace Signia.Saga;
 
-public interface ISagaHandler
+public interface ISagaHandler : IHandler
 {
     public List<Type> EventTypes { get; }
 

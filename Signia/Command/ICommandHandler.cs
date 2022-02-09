@@ -1,6 +1,8 @@
-﻿namespace Signia.Command;
+﻿using Signia.Application;
 
-public interface ICommandHandler
+namespace Signia.Command;
+
+public interface ICommandHandler : IHandler
 {
     public Type CommandType { get; }
     Task Execute(ICommand command);

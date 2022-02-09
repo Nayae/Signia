@@ -1,6 +1,8 @@
-﻿namespace Signia.Event;
+﻿using Signia.Application;
 
-public interface IEventHandler
+namespace Signia.Event;
+
+public interface IEventHandler : IHandler
 {
     public Type EventType { get; }
     Task Handle(IEvent evt);
