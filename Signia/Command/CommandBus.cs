@@ -13,7 +13,7 @@ public class CommandBus : ICommandBus
         _handlers = new Dictionary<Type, ICommandHandler>();
     }
 
-    public void ConfigureHandlers(IEnumerable<ICommandHandler> handlers)
+    public void MapHandlers(IEnumerable<ICommandHandler> handlers)
     {
         foreach (var handler in handlers)
         {

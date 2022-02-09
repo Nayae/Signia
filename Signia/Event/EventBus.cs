@@ -16,7 +16,7 @@ public class EventBus : IEventBus
         _handlers = new Dictionary<Type, IEventHandler>();
     }
 
-    public void ConfigureHandlers(IEnumerable<IEventHandler> handlers)
+    public void MapHandlers(IEnumerable<IEventHandler> handlers)
     {
         foreach (var handler in handlers)
         {

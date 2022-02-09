@@ -18,9 +18,20 @@ public class SagaBus : ISagaBus
         _handlers = new Dictionary<Type, List<ISagaHandler>>();
     }
 
-    public void ConfigureHandlers(IEnumerable<ISagaHandler> handlers)
+    public void MapHandlers(IEnumerable<ISagaHandler> handlers)
     {
-        MapSagaHandlers(handlers);
+        foreach (var handler in handlers)
+        {
+            foreach (var eventType in handler.EventTypes)
+            {
+                if (!_handlers.TryGetValue(eventType, out var handlerList))
+                {
+                    _handlers[eventType] = handlerList = new List<ISagaHandler>();
+                }
+
+                handlerList.Add(handler);
+            }
+        }
     }
 
     public async Task Handle(IEvent evt)
@@ -60,21 +71,5 @@ public class SagaBus : ISagaBus
             saga.GetType().Name,
             evt.GetType().Name
         );
-    }
-
-    private void MapSagaHandlers(IEnumerable<ISagaHandler> sagaHandlers)
-    {
-        foreach (var sagaHandler in sagaHandlers)
-        {
-            foreach (var eventType in sagaHandler.EventTypes)
-            {
-                if (!_handlers.TryGetValue(eventType, out var sagas))
-                {
-                    _handlers[eventType] = sagas = new List<ISagaHandler>();
-                }
-
-                sagas.Add(sagaHandler);
-            }
-        }
     }
 }
