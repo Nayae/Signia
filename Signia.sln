@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Signia", "Signia\Signia.csproj", "{37EA5603-8FC3-4EFD-8569-749789A72485}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Signia.Playground", "Signia.Playground\Signia.Playground.csproj", "{2F777EF6-9210-46A8-A9A7-DB977CF1C5FE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{37EA5603-8FC3-4EFD-8569-749789A72485}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37EA5603-8FC3-4EFD-8569-749789A72485}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37EA5603-8FC3-4EFD-8569-749789A72485}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37EA5603-8FC3-4EFD-8569-749789A72485}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F777EF6-9210-46A8-A9A7-DB977CF1C5FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F777EF6-9210-46A8-A9A7-DB977CF1C5FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F777EF6-9210-46A8-A9A7-DB977CF1C5FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F777EF6-9210-46A8-A9A7-DB977CF1C5FE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
