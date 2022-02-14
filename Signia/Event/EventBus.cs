@@ -5,6 +5,9 @@ namespace Signia.Event;
 
 public class EventBus : IEventBus
 {
+    public Action<IEvent>? BeforeHandle { get; set; }
+    public Action<IEvent>? AfterHandle { get; set; }
+
     private readonly ILogger _logger;
     private readonly ISagaBus _sagaBus;
     private readonly Dictionary<Type, IEventHandler> _handlers;
@@ -34,10 +37,12 @@ public class EventBus : IEventBus
 
         _logger.Verbose("Started handling of EventType=[{A}]", evt.GetType().Name);
 
+        BeforeHandle?.Invoke(evt);
         await Task.WhenAll(
             handler.Handle(evt),
             _sagaBus.Handle(evt)
         );
+        AfterHandle?.Invoke(evt);
 
         _logger.Verbose("Finished handling of EventType=[{A}]", evt.GetType().Name);
     }

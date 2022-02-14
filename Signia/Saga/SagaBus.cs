@@ -6,6 +6,9 @@ namespace Signia.Saga;
 
 public class SagaBus : ISagaBus
 {
+    public Action<ISagaHandler, IEvent>? BeforeHandle { get; set; }
+    public Action<ISagaHandler, IEvent>? AfterHandle { get; set; }
+
     private readonly ILogger _logger;
     private readonly ICommandBus _commandBus;
     private readonly Dictionary<Type, List<ISagaHandler>> _handlers;
@@ -56,12 +59,21 @@ public class SagaBus : ISagaBus
             evt.GetType().Name
         );
 
+        BeforeHandle?.Invoke(saga, evt);
         var handlingTask = saga.Handle(evt);
+        AfterHandle?.Invoke(saga, evt);
+
         if (handlingTask == null)
         {
             _logger.Verbose("Execution of SagaType=[{A}] led to no state change", saga.GetType().Name);
             return;
         }
+
+        _logger.Verbose(
+            "Execution of SagaType=[{A}] produced a command of CommandType=[{B}]",
+            saga.GetType().Name,
+            handlingTask.Result.GetType().Name
+        );
 
         await handlingTask;
         await _commandBus.Execute(handlingTask.Result);
