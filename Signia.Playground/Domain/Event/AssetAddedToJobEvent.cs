@@ -1,4 +1,4 @@
-﻿using Signia.Event;
+﻿using Signia.Core.CQRS.Event;
 
 namespace Signia.Playground.Domain.Event;
 

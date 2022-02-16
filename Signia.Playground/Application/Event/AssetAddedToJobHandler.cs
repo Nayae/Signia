@@ -3,7 +3,7 @@ using Signia.Playground.Domain.Event;
 
 namespace Signia.Playground.Application.Event;
 
-public class AssetAddedToJobHandler : Signia.Event.EventHandler<AssetAddedToJobEvent>
+public class AssetAddedToJobHandler : Core.CQRS.Event.EventHandler<AssetAddedToJobEvent>
 {
     public AssetAddedToJobHandler(ILogger logger) : base(logger)
     {

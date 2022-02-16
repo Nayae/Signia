@@ -1,13 +1,10 @@
 ﻿using Serilog;
-using Signia.Saga;
+using Signia.Core.CQRS.Saga;
 
-namespace Signia.Event;
+namespace Signia.Core.CQRS.Event;
 
 public class EventBus : IEventBus
 {
-    public Action<IEvent>? BeforeHandle { get; set; }
-    public Action<IEvent>? AfterHandle { get; set; }
-
     private readonly ILogger _logger;
     private readonly ISagaBus _sagaBus;
     private readonly Dictionary<Type, IEventHandler> _handlers;
@@ -27,7 +24,7 @@ public class EventBus : IEventBus
         }
     }
 
-    public async Task Publish(IEvent evt)
+    public async Task PublishAsync(IEvent evt)
     {
         if (!_handlers.TryGetValue(evt.GetType(), out var handler))
         {
@@ -37,13 +34,16 @@ public class EventBus : IEventBus
 
         _logger.Verbose("Started handling of EventType=[{A}]", evt.GetType().Name);
 
-        BeforeHandle?.Invoke(evt);
         await Task.WhenAll(
-            handler.Handle(evt),
-            _sagaBus.Handle(evt)
+            handler.HandleAsync(evt),
+            _sagaBus.HandleAsync(evt)
         );
-        AfterHandle?.Invoke(evt);
 
         _logger.Verbose("Finished handling of EventType=[{A}]", evt.GetType().Name);
+    }
+
+    public void Publish(IEvent evt)
+    {
+        PublishAsync(evt).Wait();
     }
 }

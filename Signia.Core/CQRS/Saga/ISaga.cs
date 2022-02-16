@@ -1,4 +1,4 @@
-﻿namespace Signia.Saga;
+﻿namespace Signia.Core.CQRS.Saga;
 
 public interface ISaga
 {

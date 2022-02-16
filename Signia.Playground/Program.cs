@@ -1,13 +1,13 @@
 ﻿using Autofac;
 using Serilog;
-using Signia.Application;
-using Signia.Command;
-using Signia.Event;
+using Signia.Core.CQRS.Application;
+using Signia.Core.CQRS.Command;
+using Signia.Core.CQRS.Event;
+using Signia.Core.CQRS.Saga;
 using Signia.Playground.Application.Command;
 using Signia.Playground.Application.Event;
 using Signia.Playground.Application.Saga;
 using Signia.Playground.Domain.Command;
-using Signia.Saga;
 
 void RegisterBus<TBusInterface, TBusImplementation>(ContainerBuilder builder)
     where TBusImplementation : TBusInterface
@@ -59,4 +59,4 @@ MapHandlers<IEventBus, IEventHandler>(container);
 MapHandlers<ISagaBus, ISagaHandler>(container);
 
 var commandBus = container.Resolve<ICommandBus>();
-await commandBus.Execute(new AddAssetToJobCommand());
+await commandBus.ExecuteAsync(new AddAssetToJobCommand());

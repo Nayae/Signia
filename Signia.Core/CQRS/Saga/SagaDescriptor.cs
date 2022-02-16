@@ -1,7 +1,7 @@
-﻿using Signia.Command;
-using Signia.Event;
+﻿using Signia.Core.CQRS.Command;
+using Signia.Core.CQRS.Event;
 
-namespace Signia.Saga;
+namespace Signia.Core.CQRS.Saga;
 
 public class SagaDescriptor<TEvent, TCommand> : ISagaDescriptor
     where TEvent : IEvent

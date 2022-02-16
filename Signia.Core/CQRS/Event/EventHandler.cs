@@ -1,6 +1,6 @@
 ﻿using Serilog;
 
-namespace Signia.Event;
+namespace Signia.Core.CQRS.Event;
 
 public abstract class EventHandler<T> : IEventHandler where T : IEvent
 {
@@ -15,7 +15,7 @@ public abstract class EventHandler<T> : IEventHandler where T : IEvent
         _logger = logger;
     }
 
-    public async Task Handle(IEvent evt)
+    public async Task HandleAsync(IEvent evt)
     {
         if (evt is not T typedEvent)
         {
@@ -29,5 +29,10 @@ public abstract class EventHandler<T> : IEventHandler where T : IEvent
         }
 
         await Handle(typedEvent);
+    }
+
+    public void Handle(IEvent evt)
+    {
+        HandleAsync(evt).Wait();
     }
 }

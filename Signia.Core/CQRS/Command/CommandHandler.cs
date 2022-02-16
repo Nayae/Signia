@@ -1,7 +1,7 @@
 ﻿using Serilog;
-using Signia.Event;
+using Signia.Core.CQRS.Event;
 
-namespace Signia.Command;
+namespace Signia.Core.CQRS.Command;
 
 public abstract class CommandHandler<TCommand, TEvent> : ICommandHandler
     where TCommand : ICommand
@@ -20,7 +20,7 @@ public abstract class CommandHandler<TCommand, TEvent> : ICommandHandler
         _eventBus = eventBus;
     }
 
-    public async Task Execute(ICommand command)
+    public async Task ExecuteAsync(ICommand command)
     {
         if (command is not TCommand typedCommand)
         {
@@ -41,6 +41,11 @@ public abstract class CommandHandler<TCommand, TEvent> : ICommandHandler
         }
 
         await handlingTask;
-        await _eventBus.Publish(handlingTask.Result);
+        await _eventBus.PublishAsync(handlingTask.Result);
+    }
+
+    public void Execute(ICommand command)
+    {
+        ExecuteAsync(command).Wait();
     }
 }

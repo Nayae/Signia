@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Signia", "Signia\Signia.csproj", "{37EA5603-8FC3-4EFD-8569-749789A72485}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Signia.Core", "Signia.Core\Signia.Core.csproj", "{37EA5603-8FC3-4EFD-8569-749789A72485}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Signia.Playground", "Signia.Playground\Signia.Playground.csproj", "{2F777EF6-9210-46A8-A9A7-DB977CF1C5FE}"
 EndProject

@@ -1,8 +1,8 @@
 ﻿using Serilog;
-using Signia.Command;
-using Signia.Event;
+using Signia.Core.CQRS.Command;
+using Signia.Core.CQRS.Event;
 
-namespace Signia.Saga;
+namespace Signia.Core.CQRS.Saga;
 
 public abstract class SagaHandler : ISagaHandler
 {

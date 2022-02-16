@@ -1,4 +1,4 @@
-﻿using Signia.Command;
+﻿using Signia.Core.CQRS.Command;
 
 namespace Signia.Playground.Domain.Command;
 

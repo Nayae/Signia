@@ -1,14 +1,11 @@
 ﻿using Serilog;
-using Signia.Command;
-using Signia.Event;
+using Signia.Core.CQRS.Command;
+using Signia.Core.CQRS.Event;
 
-namespace Signia.Saga;
+namespace Signia.Core.CQRS.Saga;
 
 public class SagaBus : ISagaBus
 {
-    public Action<ISagaHandler, IEvent>? BeforeHandle { get; set; }
-    public Action<ISagaHandler, IEvent>? AfterHandle { get; set; }
-
     private readonly ILogger _logger;
     private readonly ICommandBus _commandBus;
     private readonly Dictionary<Type, List<ISagaHandler>> _handlers;
@@ -37,7 +34,7 @@ public class SagaBus : ISagaBus
         }
     }
 
-    public async Task Handle(IEvent evt)
+    public async Task HandleAsync(IEvent evt)
     {
         if (!_handlers.TryGetValue(evt.GetType(), out var handlers))
         {
@@ -51,6 +48,11 @@ public class SagaBus : ISagaBus
         );
     }
 
+    public void Handle(IEvent evt)
+    {
+        HandleAsync(evt).Wait();
+    }
+
     private async Task HandleSaga(ISagaHandler saga, IEvent evt)
     {
         _logger.Verbose(
@@ -59,9 +61,7 @@ public class SagaBus : ISagaBus
             evt.GetType().Name
         );
 
-        BeforeHandle?.Invoke(saga, evt);
         var handlingTask = saga.Handle(evt);
-        AfterHandle?.Invoke(saga, evt);
 
         if (handlingTask == null)
         {
@@ -76,7 +76,7 @@ public class SagaBus : ISagaBus
         );
 
         await handlingTask;
-        await _commandBus.Execute(handlingTask.Result);
+        await _commandBus.ExecuteAsync(handlingTask.Result);
 
         _logger.Verbose(
             "Finished handling of SagaType=[{A}] for EventType=[{B}]",

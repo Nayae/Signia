@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Signia\Signia.csproj" />
+      <ProjectReference Include="..\Signia.Core\Signia.Core.csproj" />
     </ItemGroup>
 
     <ItemGroup>

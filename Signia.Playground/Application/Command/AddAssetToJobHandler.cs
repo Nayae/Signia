@@ -1,6 +1,6 @@
 ﻿using Serilog;
-using Signia.Command;
-using Signia.Event;
+using Signia.Core.CQRS.Command;
+using Signia.Core.CQRS.Event;
 using Signia.Playground.Domain.Command;
 using Signia.Playground.Domain.Event;
 

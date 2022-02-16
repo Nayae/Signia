@@ -1,4 +1,4 @@
-﻿namespace Signia.Application;
+﻿namespace Signia.Core.CQRS.Application;
 
 public interface IBus<in T> where T : IHandler
 {

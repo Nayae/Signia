@@ -1,12 +1,9 @@
 ﻿using Serilog;
 
-namespace Signia.Command;
+namespace Signia.Core.CQRS.Command;
 
 public class CommandBus : ICommandBus
 {
-    public Action<ICommand>? BeforeExecute { get; set; }
-    public Action<ICommand>? AfterExecute { get; set; }
-
     private readonly ILogger _logger;
     private readonly Dictionary<Type, ICommandHandler> _handlers;
 
@@ -24,7 +21,7 @@ public class CommandBus : ICommandBus
         }
     }
 
-    public async Task Execute(ICommand command)
+    public async Task ExecuteAsync(ICommand command)
     {
         if (!_handlers.TryGetValue(command.GetType(), out var handler))
         {
@@ -34,10 +31,13 @@ public class CommandBus : ICommandBus
 
         _logger.Verbose("Started execution of CommandType=[{A}]", command.GetType().Name);
 
-        BeforeExecute?.Invoke(command);
-        await handler.Execute(command);
-        AfterExecute?.Invoke(command);
+        await handler.ExecuteAsync(command);
 
         _logger.Verbose("Finished execution of CommandType=[{A}]", command.GetType().Name);
+    }
+
+    public void Execute(ICommand command)
+    {
+        ExecuteAsync(command).Wait();
     }
 }
