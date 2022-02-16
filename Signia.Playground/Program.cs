@@ -3,11 +3,14 @@ using Serilog;
 using Signia.Core.CQRS.Application;
 using Signia.Core.CQRS.Command;
 using Signia.Core.CQRS.Event;
+using Signia.Core.CQRS.Query;
 using Signia.Core.CQRS.Saga;
 using Signia.Playground.Application.Command;
 using Signia.Playground.Application.Event;
+using Signia.Playground.Application.Query;
 using Signia.Playground.Application.Saga;
 using Signia.Playground.Domain.Command;
+using Signia.Playground.Domain.Query;
 
 void RegisterBus<TBusInterface, TBusImplementation>(ContainerBuilder builder)
     where TBusImplementation : TBusInterface
@@ -32,6 +35,7 @@ var builder = new ContainerBuilder();
 RegisterBus<ICommandBus, CommandBus>(builder);
 RegisterBus<IEventBus, EventBus>(builder);
 RegisterBus<ISagaBus, SagaBus>(builder);
+RegisterBus<IQueryBus, QueryBus>(builder);
 
 builder.RegisterType<AddAssetToJobHandler>()
     .As<ICommandHandler>();
@@ -45,6 +49,9 @@ builder.RegisterType<AssetAddedToJobHandler>()
 builder.RegisterType<UpdateJobDescriptionSaga>()
     .As<ISagaHandler>();
 
+builder.RegisterType<GetAssetsByTaskIdHandler>()
+    .As<IQueryHandler>();
+
 builder.RegisterInstance(
     new LoggerConfiguration()
         .WriteTo.Console()
@@ -57,6 +64,7 @@ var container = builder.Build();
 MapHandlers<ICommandBus, ICommandHandler>(container);
 MapHandlers<IEventBus, IEventHandler>(container);
 MapHandlers<ISagaBus, ISagaHandler>(container);
+MapHandlers<IQueryBus, IQueryHandler>(container);
 
 var commandBus = container.Resolve<ICommandBus>();
 await commandBus.ExecuteAsync(new AddAssetToJobCommand());

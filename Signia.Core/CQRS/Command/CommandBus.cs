@@ -25,8 +25,7 @@ public class CommandBus : ICommandBus
     {
         if (!_handlers.TryGetValue(command.GetType(), out var handler))
         {
-            _logger.Error("No CommandHandler registered for CommandType=[{A}]", command.GetType().Name);
-            return;
+            throw new Exception($"No CommandHandler registered for CommandType=[{command.GetType().Name}]");
         }
 
         _logger.Verbose("Started execution of CommandType=[{A}]", command.GetType().Name);

@@ -1,5 +1,4 @@
-﻿using Serilog;
-using Signia.Core.CQRS.Command;
+﻿using Signia.Core.CQRS.Command;
 using Signia.Core.CQRS.Event;
 
 namespace Signia.Core.CQRS.Saga;
@@ -10,12 +9,10 @@ public abstract class SagaHandler : ISagaHandler
 
     protected abstract ISagaDescriptor[] ConfigureSagas();
 
-    private readonly ILogger _logger;
     private readonly Dictionary<Type, ISagaDescriptor> _descriptors;
 
-    protected SagaHandler(ILogger logger)
+    protected SagaHandler()
     {
-        _logger = logger;
         _descriptors = new Dictionary<Type, ISagaDescriptor>();
 
         EventTypes = new List<Type>();
@@ -27,11 +24,7 @@ public abstract class SagaHandler : ISagaHandler
     {
         if (!_descriptors.TryGetValue(evt.GetType(), out var descriptor))
         {
-            _logger.Error(
-                "Expected SagaHandler for EventType=[{A}] but none could be found",
-                evt.GetType().Name
-            );
-            return null;
+            throw new Exception($"Expected SagaHandler for EventType=[{evt.GetType().Name}] but none could be found");
         }
 
         return descriptor.Handle(evt);
@@ -43,12 +36,10 @@ public abstract class SagaHandler : ISagaHandler
         {
             if (_descriptors.ContainsKey(descriptor.EventType))
             {
-                _logger.Fatal(
-                    "Cannot register duplicate sagas for EventType=[{A}] in SagaHandlerType=[{B}]",
-                    descriptor.EventType.Name,
-                    GetType().Name
+                throw new Exception(
+                    $"Cannot register duplicate sagas for EventType=[{descriptor.EventType.Name}] " +
+                    $"in SagaHandlerType=[{GetType().Name}]"
                 );
-                throw new Exception();
             }
 
             _descriptors.Add(descriptor.EventType, descriptor);

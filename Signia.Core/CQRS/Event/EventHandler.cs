@@ -1,31 +1,20 @@
-﻿using Serilog;
+﻿namespace Signia.Core.CQRS.Event;
 
-namespace Signia.Core.CQRS.Event;
-
-public abstract class EventHandler<T> : IEventHandler where T : IEvent
+public abstract class EventHandler<TEvent> : IEventHandler where TEvent : IEvent
 {
-    public Type EventType => typeof(T);
+    public Type EventType => typeof(TEvent);
 
-    protected abstract Task Handle(T evt);
-
-    private readonly ILogger _logger;
-
-    protected EventHandler(ILogger logger)
-    {
-        _logger = logger;
-    }
+    protected abstract Task Handle(TEvent evt);
 
     public async Task HandleAsync(IEvent evt)
     {
-        if (evt is not T typedEvent)
+        if (evt is not TEvent typedEvent)
         {
-            _logger.Error(
-                "EventHandlerType=[{A}] expected EventType=[{B}] but received EventType=[{C}]",
-                GetType().Name,
-                typeof(T).Name,
-                evt.GetType().Name
+            throw new Exception(
+                $"EventHandlerType=[{GetType().Name}] " +
+                $"expected EventType=[{typeof(TEvent).Name}] " +
+                $"but received EventType=[{evt.GetType().Name}]"
             );
-            return;
         }
 
         await Handle(typedEvent);

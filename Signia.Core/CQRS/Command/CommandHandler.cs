@@ -24,13 +24,11 @@ public abstract class CommandHandler<TCommand, TEvent> : ICommandHandler
     {
         if (command is not TCommand typedCommand)
         {
-            _logger.Error(
-                "CommandHandlerType=[{A}] expected CommandType=[{B}] but received CommandType=[{C}]",
-                GetType().Name,
-                typeof(TCommand).Name,
-                command.GetType().Name
+            throw new Exception(
+                $"CommandHandlerType=[{GetType().Name}] " +
+                $"expected CommandType=[{typeof(TCommand).Name}] " +
+                $"but received CommandType=[{command.GetType().Name}]"
             );
-            return;
         }
 
         var handlingTask = Handle(typedCommand);
